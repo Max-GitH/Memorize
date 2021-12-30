@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let emojis_1 = ["🥶", "😱", "😰", "😶", "😐", "😵‍💫", "😭", "🐻"]
-    let emojis_2 = ["🍏", "🍓", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇"]
-    let emojis_3 = ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉"]
+    @State var emojis_1 = ["🥶", "😱", "😰", "😶", "😐", "😵‍💫", "😭", "🐻", "😶‍🌫️"]
+    @State var emojis_2 = ["🍏", "🍓", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇"]
+    @State var emojis_3 = ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱"]
 
     @State var currentEmojis = 1
     
@@ -21,81 +21,65 @@ struct ContentView: View {
             Text("Memorize!").font(.largeTitle).padding()
             ScrollView{
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]){
-                    
-                    ForEach(currentEmojis[0..<currentEmojis.count],
-                            id: \.self){ emoji in
-                        CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                    if currentEmojis == 1{
+                        ForEach (emojis_1[0..<emojis_1.count],
+                                id: \.self){ emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                        }
+                    }
+                    else if currentEmojis == 2{
+                        ForEach(emojis_2[0..<emojis_2.count],
+                                id: \.self){ emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                        }
+                    }
+                    else if currentEmojis == 3{
+                        ForEach(emojis_3[0..<emojis_3.count],
+                                id: \.self){ emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                        }
                     }
                 }
             }
             .foregroundColor(.red)
             Spacer()
             HStack{
-                ThemeButton(themeNumber: 1, themePicture: "face.smiling")
+                Button(action: {
+                    emojis_1.shuffle()
+                    currentEmojis = 1
+                    
+                },
+                       label: {
+                    VStack{
+                        Image(systemName: "face.smiling").font(.largeTitle)
+                        Text("Theme 1").font(.footnote)}
+                    })
                 Spacer()
-                ThemeButton(themeNumber: 2, themePicture: "face.smiling")
+                Button(action: {
+                    emojis_2.shuffle()
+                    currentEmojis = 2},
+                       label: {
+                    VStack{
+                        Image(systemName: "staroflife.circle").font(.largeTitle)
+                        Text("Theme 2").font(.footnote)}
+                    })
                 Spacer()
-                ThemeButton(themeNumber: 3, themePicture: "face.smiling")
+                Button(action: {
+                    emojis_3.shuffle()
+                    currentEmojis = 3},
+                       label: {
+                    VStack{
+                        Image(systemName: "hand.raised.fill").font(.largeTitle)
+                        Text("Theme 3").font(.footnote)}
+                    })
             }
-            .padding(.horizontal)
+            .padding()
+
         }
         .padding(.horizontal)
     }
-    
-    
-    var ThemeButton: Button<<#Label: View#>> {
-        action:{},
-        label{}
-        var themeNumber: Int
-        var themePicture: String
-        
-        var body: some View{
-            Button(action:{
-                if themeNumber == 1{
-                    currentEmojis = 1
-                }
-                else if themeNumber == 2{
-                    currentEmojis = 2
-                }
-                else if themeNumber == 3{
-                    currentEmojis = 3
-                }
-            }, label: {
-                VStack{
-                    Image(systemName: themePicture).font(.largeTitle)
-                    Text("Theme " + String(themeNumber))
-                }
-            }
-            )
-        }
-    }
-    
 }
 
-//struct ThemeButton: View {
-//    var themeNumber: Int
-//    var themePicture: String
-//
-//    var body: some View{
-//        Button(action:{
-//            if themeNumber == 1{
-//                currentEmojis = 1
-//            }
-//            else if themeNumber == 2{
-//                currentEmojis = 2
-//            }
-//            else if themeNumber == 3{
-//                currentEmojis = 3
-//            }
-//        }, label: {
-//            VStack{
-//                Image(systemName: themePicture).font(.largeTitle)
-//                Text("Theme " + String(themeNumber))
-//            }
-//        }
-//        )
-//    }
-//}
 
 struct CardView: View {
     var content: String
